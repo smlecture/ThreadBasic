@@ -3,70 +3,46 @@ package kr.co.company.threadbasic;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
-    WorkerThread wt;
-    Thread wr;
-//    WorkerRunnable wr;
-    boolean running = true;
-    String strTag = "THREAD";
 
-    class WorkerThread extends Thread {
-        public void run() {
-            int i = 0;
-            for (i = 0; i < 20 && running; i++) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                }
-                Log.v(strTag, "Thread time=" + i);
-            }
-        }
-    }
-
+    Button button;
+    ImageView imageView;
+    Bitmap bmp;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.v(strTag, "Now I am in onCreate");
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        wt = new WorkerThread();
-//        wr = new WorkerRunnable();
-        wr = new Thread(new Runnable() {
-            public void run() {
-                int i = 0;
-                for (i = 0; i < 20 && running; i++) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
+        button = findViewById(R.id.button);
+        imageView = findViewById(R.id.imageView);
+        
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Integer lenaImageId = R.drawable.lena;
+                        imageView.setImageResource(lenaImageId);
                     }
-                    Log.v("THREAD", "Runnable time=" + i);
-                }
+                }).start();
             }
         });
-        running = true;
-        wr.start();
-
-        wt.start();
-        Log.v(strTag, "Now I am in onStart");
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        running = false;
-        Log.v(strTag, "Now I am in onStop");
-    }
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.v(strTag, "Now I am in onPause");
-    }
+
 
 }
