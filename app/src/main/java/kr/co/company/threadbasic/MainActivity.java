@@ -4,23 +4,19 @@ import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 public class MainActivity extends AppCompatActivity {
+
+    Thread wr;
 
     Button button;
     ImageView imageView;
-    Bitmap bmp;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,21 +24,30 @@ public class MainActivity extends AppCompatActivity {
 
         button = findViewById(R.id.button);
         imageView = findViewById(R.id.imageView);
-        
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Thread(new Runnable() {
-                    @Override
+                wr = new Thread(new Runnable() {
                     public void run() {
-                        Integer lenaImageId = R.drawable.lena;
-                        imageView.setImageResource(lenaImageId);
+
+                        imageView.setImageResource(R.drawable.lena);
                     }
-                }).start();
+                });
+                wr.start();
             }
         });
     }
 
+/*    @Override
+    public void onStart() {
+        super.onStart();
+        wr = new Thread(new Runnable() {
+            public void run() {
 
-
+                imageView.setImageResource(R.drawable.lena);
+            }
+        });
+        wr.start();
+    }*/
 }
